@@ -33,6 +33,8 @@ class Game {
       opponent: null,
     };
 
+    this.bottomGap = 70;
+
     this.assetLoader = new AssetLoader({
       backgroundType: BACKGROUND_TYPES.general,
       ballType: BALL_TYPES.general,
@@ -161,6 +163,7 @@ class Game {
     this.ball = new Ball({
       width,
       height,
+      gameInstance: this,
       ctx: this.ctx,
       x: this.canvas.width / 2 - width / 2,
       y: 70,
