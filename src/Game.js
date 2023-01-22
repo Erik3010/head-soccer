@@ -53,7 +53,7 @@ class Game {
     // dummy code
     setInterval(() => {
       this.character.opponent.kick();
-    }, 2000);
+    }, 2500);
 
     this.registerEventHandler();
 
