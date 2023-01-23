@@ -16,3 +16,11 @@ export const isJumpKey = (code) => JUMP_KEYS.includes(code);
 export const isKickKey = (code) => KICK_KEYS.includes(code);
 export const isAllowedKey = (code) =>
   isMovementKey(code) || isJumpKey(code) || isKickKey(code);
+
+export const mapValue = (value, originalMin, originalMax, newMin, newMax) => {
+  const originalRange = originalMax - originalMin;
+  const newRange = newMax - newMin;
+  return ((value - originalMin) / originalRange) * newRange + newMin;
+};
+
+export const clamp = (value, min, max) => Math.min(max, Math.max(min, value));

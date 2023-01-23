@@ -9,7 +9,13 @@ import {
   MOVEMENT_DIRECTION_MAP,
 } from "./constants";
 import AssetLoader from "./AssetLoader";
-import { isAllowedKey, isJumpKey, isKickKey, isMovementKey } from "./utility";
+import {
+  isAllowedKey,
+  isJumpKey,
+  isKickKey,
+  isMovementKey,
+  mapValue,
+} from "./utility";
 import Ball from "./elements/Ball";
 
 class Game {
@@ -23,6 +29,8 @@ class Game {
     };
     this.selectedBall = null;
     this.selectedBackground = null;
+
+    this.startTimestamp = null;
 
     this.background = null;
     this.flagBoard = null;
@@ -57,7 +65,8 @@ class Game {
 
     this.registerEventHandler();
 
-    this.render();
+    requestAnimationFrame(this.render.bind(this));
+    // this.render();
   }
   registerEventHandler() {
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
@@ -182,7 +191,16 @@ class Game {
       goal.draw();
     }
   }
-  render() {
+  render(timestamp) {
+    if (this.startTimestamp === null) {
+      this.startTimestamp = timestamp;
+    }
+
+    const elapsed = timestamp - this.startTimestamp;
+    const seconds = Math.floor(elapsed / 1000);
+    const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
+    // this.ball.angle = angle;
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.draw();
     requestAnimationFrame(this.render.bind(this));

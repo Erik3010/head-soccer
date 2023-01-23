@@ -13,7 +13,7 @@ class Character extends Sprite {
     this.spriteCollection = sprites;
 
     this.gravity = 0.5;
-    this.moveSpeed = 3;
+    this.moveSpeed = 5;
     this.jumpHeight = 15;
 
     this.isKick = false;

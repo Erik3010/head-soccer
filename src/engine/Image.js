@@ -28,22 +28,28 @@ class CanvasImage extends Drawable {
       this.image.src = this.imageSrc;
     }
   }
+  get renderCoordinate() {
+    return {
+      x: this.x,
+      y: this.y,
+    };
+  }
+  get drawImageParams() {
+    const { x, y } = this.renderCoordinate;
+    const inverse = this.isFlip ? -1 : 1;
+
+    return [this.image, x * inverse, y, this.width * inverse, this.height];
+  }
+  beforeDraw() {}
   draw() {
     this.update();
 
     if (!this.image) return;
 
     this.ctx.save();
-    if (this.isFlip) {
-      this.ctx.scale(-1, 1);
-    }
-    this.ctx.drawImage(
-      this.image,
-      this.x * (this.isFlip ? -1 : 1),
-      this.y,
-      this.width * (this.isFlip ? -1 : 1),
-      this.height
-    );
+    this.isFlip && this.ctx.scale(-1, 1);
+    this.beforeDraw();
+    this.ctx.drawImage(...this.drawImageParams);
     this.ctx.restore();
   }
   update() {}
