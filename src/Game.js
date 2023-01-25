@@ -10,7 +10,9 @@ import {
 } from "./constants";
 import AssetLoader from "./AssetLoader";
 import {
+  collidedSide,
   isAllowedKey,
+  isCollide,
   isJumpKey,
   isKickKey,
   isMovementKey,
@@ -163,7 +165,7 @@ class Game {
   initBall() {
     const { width: originalWidth, height: originalHeight } =
       this.assetLoader.assets.ball;
-    const ballScale = 2;
+    const ballScale = 2.5;
     const { width, height } = {
       width: originalWidth / ballScale,
       height: originalHeight / ballScale,
@@ -189,6 +191,24 @@ class Game {
 
     for (const goal of this.goals) {
       goal.draw();
+    }
+
+    for (const characterType in this.character) {
+      const character = this.character[characterType];
+      if (isCollide(character, this.ball)) {
+        const side = collidedSide(character, this.ball);
+        const force = { x: 10, y: 10 };
+
+        if (side === "left") {
+          force.x *= -1;
+          force.y *= -1;
+        } else if (side === "top") {
+          force.y *= -1;
+        }
+
+        this.ball.velocity.x = force.x;
+        this.ball.velocity.y = force.y;
+      }
     }
   }
   render(timestamp) {

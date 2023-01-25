@@ -13,6 +13,8 @@ class Ball extends CanvasImage {
     this.bounce = 0.7;
 
     this.angle = 0;
+
+    this.force = 10;
   }
   update() {
     super.update();
@@ -24,7 +26,7 @@ class Ball extends CanvasImage {
   }
   constrainToGameArea() {
     const bottom =
-      this.game.canvas.height - this.height - (this.game.bottomGap + 15);
+      this.game.canvas.height - this.height - (this.game.bottomGap + 20);
     const right = this.game.canvas.width - this.width;
 
     if (this.y > bottom) {
@@ -49,6 +51,7 @@ class Ball extends CanvasImage {
     };
   }
   beforeDraw() {
+    // for rotate purposes
     this.ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     this.ctx.rotate(this.angle * (Math.PI / 180));
   }
