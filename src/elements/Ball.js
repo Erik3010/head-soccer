@@ -14,7 +14,7 @@ class Ball extends CanvasImage {
 
     this.angle = 0;
 
-    this.force = 10;
+    this.force = 0;
   }
   update() {
     super.update();

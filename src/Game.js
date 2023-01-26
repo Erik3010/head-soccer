@@ -217,9 +217,9 @@ class Game {
     }
 
     const elapsed = timestamp - this.startTimestamp;
-    const seconds = Math.floor(elapsed / 1000);
+    const time = Math.floor(elapsed / 1000);
     const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
-    // this.ball.angle = angle;
+    this.ball.angle = angle;
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.draw();

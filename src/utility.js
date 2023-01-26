@@ -34,21 +34,21 @@ export const isCollide = (objectA, objectB) =>
   objectA.y + objectA.height >= objectB.y &&
   objectA.y <= objectB.y + objectB.height;
 
-export const collidedSide = (objectA, objectB) => {
+/**
+ * Check collided side
+ * @param {*} target Target to check which side is collided
+ * @param {*} obstacle Obstacle that hit the target
+ */
+export const collidedSide = (target, obstacle) => {
   const delta = {
-    x: objectA.x + objectA.width / 2 - (objectB.x + objectB.width / 2),
-    y: objectA.y + objectA.height / 2 - (objectB.y + objectB.height / 2),
+    x: target.x + target.width / 2 - (obstacle.x + obstacle.width / 2),
+    y: target.y + target.height / 2 - (obstacle.y + obstacle.height / 2),
   };
 
   const minDistance = {
-    x: objectA.width / 2 + objectB.width / 2,
-    y: objectA.height / 2 + objectB.height / 2,
+    x: target.width / 2 + obstacle.width / 2,
+    y: target.height / 2 + obstacle.height / 2,
   };
-
-  // const depth = {
-  //   x: Math.abs(delta.x) - Math.abs(minDistance.x),
-  //   y: Math.abs(delta.y) - Math.abs(minDistance.y),
-  // };
 
   const depth = {
     x: delta.x > 0 ? minDistance.x - delta.x : -minDistance.x - delta.x,
@@ -56,7 +56,6 @@ export const collidedSide = (objectA, objectB) => {
   };
 
   if (depth.x || depth.y) {
-    // if (Math.abs(depth.x) > Math.abs(depth.y)) {
     if (Math.abs(depth.x) < Math.abs(depth.y)) {
       return delta.x > 0 ? "left" : "right";
     } else {
