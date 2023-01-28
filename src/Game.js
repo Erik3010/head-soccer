@@ -17,6 +17,7 @@ import {
   isKickKey,
   isMovementKey,
   mapValue,
+  random,
 } from "./utility";
 import Ball from "./elements/Ball";
 
@@ -37,13 +38,19 @@ class Game {
     this.background = null;
     this.flagBoard = null;
     this.ball = null;
-    this.goals = [];
+    // this.goals = [];
+    this.goals = {};
     this.character = {
       player: null,
       opponent: null,
     };
 
     this.bottomGap = 70;
+
+    this.score = {
+      player: 0,
+      opponent: 0,
+    };
 
     this.assetLoader = new AssetLoader({
       backgroundType: BACKGROUND_TYPES.general,
@@ -135,7 +142,7 @@ class Game {
     });
     this.character.opponent = new Character({
       ...params,
-      x: this.canvas.width - width - 150,
+      x: this.canvas.width - width - 350,
       y: 100,
       isFlip: true,
       sprites: this.assetLoader.assets.character.opponent,
@@ -152,15 +159,17 @@ class Game {
       image: this.assetLoader.assets.goal,
     };
 
-    const left = new Goal({ ...params, x: 50, y: 260 });
+    const left = new Goal({ ...params, x: 50, y: 260, side: "left" });
     const right = new Goal({
       ...params,
       x: this.canvas.width - width / goalScale - 50,
       y: 260,
       isFlip: true,
+      side: "right",
     });
 
-    this.goals = [left, right];
+    this.goals = { left, right };
+    // this.goals = [left, right];
   }
   initBall() {
     const { width: originalWidth, height: originalHeight } =
@@ -181,6 +190,75 @@ class Game {
       image: this.assetLoader.assets.ball,
     });
   }
+  handleCharacterCollideWithBall(side) {
+    const force = { x: random(8, 15), y: random(8, 15) };
+
+    if (side === "left") {
+      force.x *= -1;
+      force.y *= -1;
+    } else if (side === "top") {
+      force.y *= -1;
+    }
+
+    this.ball.velocity.x = force.x;
+    this.ball.velocity.y = force.y;
+  }
+  handleBallCollisionDirection(goal, side) {
+    let force = 10;
+
+    const isHittingUpperPart = side === "top" && !goal.isGoal;
+
+    if (isHittingUpperPart) {
+      force *= -1;
+    } else if (goal.side === "right") {
+      force *= -1;
+    }
+
+    this.ball.velocity.x = force;
+    this.ball.velocity.y = force;
+
+    goal.isGoal = false;
+  }
+  handleBallCollideWithGoals(goal, side) {
+    if (
+      (goal.side === "left" && side === "right") ||
+      (goal.side === "right" && side === "left")
+    ) {
+      goal.isGoal = true;
+      return;
+    }
+
+    this.handleBallCollisionDirection(goal, side);
+
+    // if (goalSide === "left") {
+    //   if (side === "right") {
+    //     // goal.isGoal === false && this.score.opponent++;
+    //     goal.isGoal = true;
+    //   } else {
+    //     if (side === "top" && !goal.isGoal) {
+    //       force.x *= -1;
+    //       force.y *= -1;
+    //     }
+    //     this.ball.velocity.x = force.x;
+    //     this.ball.velocity.y = force.y;
+
+    //     goal.isGoal = false;
+    //   }
+    // } else if (goalSide === "right") {
+    //   if (side === "left") {
+    //     goal.isGoal = true;
+    //   } else {
+    //     if (side === "top" && !goal.isGoal) {
+    //       force.x *= -1;
+    //       force.y *= -1;
+    //     }
+    //     this.ball.velocity.x = force.x;
+    //     this.ball.velocity.y = force.y;
+
+    //     goal.isGoal = false;
+    //   }
+    // }
+  }
   draw() {
     this.background.draw();
     this.flagBoard.draw();
@@ -189,25 +267,21 @@ class Game {
     this.character.opponent.draw();
     this.ball.draw();
 
-    for (const goal of this.goals) {
+    for (const key of Object.keys(this.goals)) {
+      const goal = this.goals[key];
       goal.draw();
+
+      if (isCollide(goal, this.ball)) {
+        const side = collidedSide(goal, this.ball);
+        this.handleBallCollideWithGoals(goal, side);
+      }
     }
 
     for (const characterType in this.character) {
       const character = this.character[characterType];
       if (isCollide(character, this.ball)) {
         const side = collidedSide(character, this.ball);
-        const force = { x: 10, y: 10 };
-
-        if (side === "left") {
-          force.x *= -1;
-          force.y *= -1;
-        } else if (side === "top") {
-          force.y *= -1;
-        }
-
-        this.ball.velocity.x = force.x;
-        this.ball.velocity.y = force.y;
+        this.handleCharacterCollideWithBall(side);
       }
     }
   }
