@@ -99,7 +99,8 @@ class GoalText extends Drawable {
     this.isShow = true;
   }
   async hide() {
-    await this.animate({ top: -this.width, bottom: this.game.canvas.width });
+    // await this.animate({ top: -this.width, bottom: this.game.canvas.width });
+    await this.animate({ top: this.game.canvas.width, bottom: -this.width });
     this.isShow = false;
   }
 }

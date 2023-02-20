@@ -96,6 +96,7 @@ class Ball extends CanvasImage {
     this.changeSize(-this.scaleAmount);
   }
   resetToDefaultSize() {
+    this.scale = 1;
     this.width = this.actualSize.width;
     this.height = this.actualSize.height;
   }

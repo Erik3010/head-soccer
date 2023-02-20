@@ -230,10 +230,6 @@ class Game {
       height: height * scale,
       image: this.assetLoader.assets.goalText,
     });
-
-    // this.goalText.animate();
-    this.goalText.show();
-    setTimeout(() => this.goalText.hide(), 2000);
   }
   spawnPowerUpItem() {
     const powerUpItem = this.generatePowerUpItem();
@@ -262,6 +258,8 @@ class Game {
   }
   handleCharacterCollideWithBall(side) {
     const force = { x: random(8, 15), y: random(8, 15) };
+
+    if (this.ball.isFreezeBall) return;
 
     if (side === "left") {
       force.x *= -1;
@@ -312,6 +310,8 @@ class Game {
     this.handleBallCollisionDirection(goal, side);
   }
   resetPosition() {
+    this.goalText.show();
+
     const resetVelocity = () => {
       this.character.player.velocity = { x: 0, y: 0 };
       this.character.opponent.velocity = { x: 0, y: 0 };
@@ -335,7 +335,17 @@ class Game {
       this.ball.y = 70;
       this.ball.x = this.canvas.width / 2 - this.ball.width / 2;
 
+      this.goalText.hide();
+
       this.ball.resetToDefaultSize();
+
+      // reset if ball freezed
+      if (this.ball.isFreezeBall) {
+        this.ball.unFreezeBall();
+        this.isPowerUpActive = false;
+        clearTimeout(this.intervalIds.powerUpActivation);
+        this.intervalIds.powerUpActivation = null;
+      }
     };
 
     setTimeout(reset, 2000);
@@ -388,7 +398,6 @@ class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.draw();
     requestAnimationFrame(this.render.bind(this));
-    // console.log(this.score.player, this.score.opponent);
   }
 }
 
