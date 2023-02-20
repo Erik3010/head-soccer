@@ -222,6 +222,7 @@ class Game {
 
     this.goalText = new GoalText({
       scale,
+      gameInstance: this,
       ctx: this.ctx,
       x: (this.canvas.width - width * scale) / 2,
       y: (this.canvas.height - height * scale) / 2,
@@ -229,6 +230,10 @@ class Game {
       height: height * scale,
       image: this.assetLoader.assets.goalText,
     });
+
+    // this.goalText.animate();
+    this.goalText.show();
+    setTimeout(() => this.goalText.hide(), 2000);
   }
   spawnPowerUpItem() {
     const powerUpItem = this.generatePowerUpItem();

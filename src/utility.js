@@ -66,3 +66,13 @@ export const collidedSide = (target, obstacle) => {
 
 export const random = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
+
+export const easeAnimation = (distance, currentFrame, step) => {
+  currentFrame /= step / 2;
+
+  if (currentFrame < 1) {
+    return (distance / 2) * Math.pow(currentFrame, 3);
+  }
+  currentFrame -= 2;
+  return (distance / 2) * (Math.pow(currentFrame, 3) + 2);
+};
