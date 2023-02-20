@@ -11,6 +11,7 @@ class AssetLoader {
       background: null,
       ball: null,
       goal: null,
+      goalText: null,
       diamondIce: null,
       decreaseBall: null,
       increaseBall: null,
@@ -34,17 +35,19 @@ class AssetLoader {
     this.opponent = opponent;
 
     this.assetFileName = {
-      background: `${this.assetUrl}/${this.backgroundType}.jpg`,
-      ball: `${this.assetUrl}/${this.ballType}.png`,
-      goal: `${this.assetUrl}/Goal - Side.png`,
-      decreaseBall: `${this.assetUrl}/Decrease Ball.png`,
-      increaseBall: `${this.assetUrl}/Increase Ball.png`,
-      diamondIce: `${this.assetUrl}/Diamond Ice.png`,
+      background: `${this.backgroundType}.jpg`,
+      ball: `${this.ballType}.png`,
+      goal: "Goal - Side.png",
+      decreaseBall: "Decrease Ball.png",
+      increaseBall: "Increase Ball.png",
+      diamondIce: "Diamond Ice.png",
+      goalText: "Goal - Text.png",
     };
   }
   async loadAssets() {
     for (const name in this.assetFileName) {
-      this.assets[name] = await loadImage(this.assetFileName[name]);
+      const assetUrl = `${this.assetUrl}/${this.assetFileName[name]}`;
+      this.assets[name] = await loadImage(assetUrl);
     }
 
     this.assets.flag.player = await loadImage(

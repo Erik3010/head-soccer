@@ -20,6 +20,10 @@ import {
   random,
 } from "./utility";
 import Ball from "./elements/Ball";
+import DecreaseBallSizePowerUp from "./elements/PowerUpItem/DecreaseBallSize";
+import IncreaseBallSizePowerUp from "./elements/PowerUpItem/IncreaseBallSize";
+import DiamondIcePowerUp from "./elements/PowerUpItem/DiamondIce";
+import GoalText from "./elements/GoalText";
 
 class Game {
   constructor({ canvas }) {
@@ -40,13 +44,16 @@ class Game {
     this.ball = null;
     // this.goals = [];
     this.goals = {};
+    this.powerUpItems = [];
     this.character = {
       player: null,
       opponent: null,
     };
+    this.goalText = null;
 
     this.bottomGap = 70;
 
+    this.isResetPosition = false;
     this.score = {
       player: 0,
       opponent: 0,
@@ -58,6 +65,23 @@ class Game {
       player: this.selectedPlayer.player,
       opponent: this.selectedPlayer.opponent,
     });
+
+    this.characterRespawnPos = {
+      x: 150,
+      y: 100,
+    };
+
+    this.availablePowerUpItems = [
+      DecreaseBallSizePowerUp,
+      IncreaseBallSizePowerUp,
+      DiamondIcePowerUp,
+    ];
+
+    this.isPowerUpActive = false;
+    this.intervalIds = {
+      spawnPowerUp: null,
+      powerUpActivation: null,
+    };
   }
   async init() {
     await this.assetLoader.loadAssets();
@@ -66,6 +90,9 @@ class Game {
     this.initCharacter();
     this.initGoals();
     this.initBall();
+    this.initGoalText();
+
+    this.spawnPowerUpItem();
 
     // dummy code
     setInterval(() => {
@@ -75,7 +102,6 @@ class Game {
     this.registerEventHandler();
 
     requestAnimationFrame(this.render.bind(this));
-    // this.render();
   }
   registerEventHandler() {
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
@@ -136,14 +162,14 @@ class Game {
 
     this.character.player = new Character({
       ...params,
-      x: 150,
-      y: 100,
+      x: this.characterRespawnPos.x,
+      y: this.characterRespawnPos.y,
       sprites: this.assetLoader.assets.character.player,
     });
     this.character.opponent = new Character({
       ...params,
-      x: this.canvas.width - width - 350,
-      y: 100,
+      x: this.canvas.width - width - this.characterRespawnPos.x,
+      y: this.characterRespawnPos.y,
       isFlip: true,
       sprites: this.assetLoader.assets.character.opponent,
     });
@@ -190,6 +216,45 @@ class Game {
       image: this.assetLoader.assets.ball,
     });
   }
+  initGoalText() {
+    const scale = 0.4;
+    const { width, height } = this.assetLoader.assets.goalText;
+
+    this.goalText = new GoalText({
+      scale,
+      ctx: this.ctx,
+      x: (this.canvas.width - width * scale) / 2,
+      y: (this.canvas.height - height * scale) / 2,
+      width: width * scale,
+      height: height * scale,
+      image: this.assetLoader.assets.goalText,
+    });
+  }
+  spawnPowerUpItem() {
+    const powerUpItem = this.generatePowerUpItem();
+    this.powerUpItems.push(powerUpItem);
+
+    this.intervalIds.spawnPowerUp = setTimeout(
+      this.spawnPowerUpItem.bind(this),
+      1000
+    );
+  }
+  generatePowerUpItem() {
+    const size = 50;
+
+    const randomIndex = random(0, this.availablePowerUpItems.length - 1);
+    const PowerUpItem = this.availablePowerUpItems[randomIndex];
+    const randomXPosition = random(size, this.canvas.width - size);
+
+    return new PowerUpItem({
+      gameInstance: this,
+      ctx: this.ctx,
+      x: randomXPosition,
+      y: -size,
+      width: size,
+      height: size,
+    });
+  }
   handleCharacterCollideWithBall(side) {
     const force = { x: random(8, 15), y: random(8, 15) };
 
@@ -225,39 +290,50 @@ class Game {
       (goal.side === "right" && side === "left")
     ) {
       goal.isGoal = true;
+
+      const scoreMap = {
+        left: "opponent",
+        right: "player",
+      };
+      if (!this.isResetPosition) {
+        this.score[scoreMap[goal.side]]++;
+        this.isResetPosition = true;
+        this.resetPosition();
+      }
+
       return;
     }
 
     this.handleBallCollisionDirection(goal, side);
+  }
+  resetPosition() {
+    const resetVelocity = () => {
+      this.character.player.velocity = { x: 0, y: 0 };
+      this.character.opponent.velocity = { x: 0, y: 0 };
+      this.ball.velocity = { x: 0, y: 0 };
+    };
 
-    // if (goalSide === "left") {
-    //   if (side === "right") {
-    //     // goal.isGoal === false && this.score.opponent++;
-    //     goal.isGoal = true;
-    //   } else {
-    //     if (side === "top" && !goal.isGoal) {
-    //       force.x *= -1;
-    //       force.y *= -1;
-    //     }
-    //     this.ball.velocity.x = force.x;
-    //     this.ball.velocity.y = force.y;
+    const reset = () => {
+      this.isResetPosition = false;
 
-    //     goal.isGoal = false;
-    //   }
-    // } else if (goalSide === "right") {
-    //   if (side === "left") {
-    //     goal.isGoal = true;
-    //   } else {
-    //     if (side === "top" && !goal.isGoal) {
-    //       force.x *= -1;
-    //       force.y *= -1;
-    //     }
-    //     this.ball.velocity.x = force.x;
-    //     this.ball.velocity.y = force.y;
+      resetVelocity();
 
-    //     goal.isGoal = false;
-    //   }
-    // }
+      this.character.player.y = this.characterRespawnPos.y;
+      this.character.player.x = this.characterRespawnPos.x;
+
+      this.character.opponent.y = this.characterRespawnPos.y;
+      this.character.opponent.x =
+        this.canvas.width -
+        this.character.opponent.width -
+        this.characterRespawnPos.x;
+
+      this.ball.y = 70;
+      this.ball.x = this.canvas.width / 2 - this.ball.width / 2;
+
+      this.ball.resetToDefaultSize();
+    };
+
+    setTimeout(reset, 2000);
   }
   draw() {
     this.background.draw();
@@ -266,6 +342,7 @@ class Game {
     this.character.player.draw();
     this.character.opponent.draw();
     this.ball.draw();
+    this.goalText.draw();
 
     for (const key of Object.keys(this.goals)) {
       const goal = this.goals[key];
@@ -284,6 +361,14 @@ class Game {
         this.handleCharacterCollideWithBall(side);
       }
     }
+
+    for (const [index, powerUpItem] of this.powerUpItems.entries()) {
+      powerUpItem.draw();
+      if (isCollide(powerUpItem, this.ball) && !this.isResetPosition) {
+        powerUpItem.activatePowerUp();
+        this.powerUpItems.splice(index, 1);
+      }
+    }
   }
   render(timestamp) {
     if (this.startTimestamp === null) {
@@ -298,6 +383,7 @@ class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.draw();
     requestAnimationFrame(this.render.bind(this));
+    // console.log(this.score.player, this.score.opponent);
   }
 }
 
