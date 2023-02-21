@@ -400,16 +400,7 @@ class Game {
       }
     }
   }
-  render(timestamp) {
-    if (this.startTimestamp === null) {
-      this.startTimestamp = timestamp;
-    }
-
-    const elapsed = timestamp - this.startTimestamp;
-    const time = Math.floor(elapsed / 1000);
-    const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
-    this.ball.angle = angle;
-
+  calculateOpponentDistanceFromBall() {
     const distanceX =
       this.ball.x +
       this.ball.width / 2 -
@@ -420,6 +411,18 @@ class Game {
       -this.character.opponent.moveSpeed,
       this.character.opponent.moveSpeed
     );
+  }
+  render(timestamp) {
+    if (this.startTimestamp === null) {
+      this.startTimestamp = timestamp;
+    }
+
+    const elapsed = timestamp - this.startTimestamp;
+    const time = Math.floor(elapsed / 1000);
+    const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
+    this.ball.angle = angle;
+
+    this.calculateOpponentDistanceFromBall();
 
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.draw();
