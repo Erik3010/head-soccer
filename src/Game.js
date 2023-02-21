@@ -10,6 +10,7 @@ import {
 } from "./constants";
 import AssetLoader from "./AssetLoader";
 import {
+  clamp,
   collidedSide,
   isAllowedKey,
   isCollide,
@@ -408,6 +409,17 @@ class Game {
     const time = Math.floor(elapsed / 1000);
     const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
     this.ball.angle = angle;
+
+    const distanceX =
+      this.ball.x +
+      this.ball.width / 2 -
+      (this.character.opponent.x + this.character.opponent.width / 2);
+
+    this.character.opponent.velocity.x = clamp(
+      +(distanceX * 0.05).toFixed(),
+      -this.character.opponent.moveSpeed,
+      this.character.opponent.moveSpeed
+    );
 
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.draw();
