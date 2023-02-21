@@ -20,6 +20,7 @@ class DiamondIcePowerUp extends PowerUpItem {
     const timeoutId = setTimeout(() => {
       this.game.ball.unFreezeBall();
       this.game.isPowerUpActive = false;
+      this.game.intervalIds.powerUpActivation = null;
     }, this.freezeDuration);
 
     this.game.intervalIds.powerUpActivation = timeoutId;

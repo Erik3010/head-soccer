@@ -60,7 +60,7 @@ class Character extends Sprite {
     this.y += this.velocity.y;
   }
   restrictToBottom() {
-    const bottom = this.game.canvas.height - this.height - this.game.bottomGap;
+    const bottom = this.game.height - this.height - this.game.bottomGap;
 
     if (this.y >= bottom) {
       this.y = bottom;

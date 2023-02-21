@@ -36,9 +36,8 @@ class Ball extends CanvasImage {
     this.constrainToGameArea();
   }
   constrainToGameArea() {
-    const bottom =
-      this.game.canvas.height - this.height - (this.game.bottomGap + 20);
-    const right = this.game.canvas.width - this.width;
+    const bottom = this.game.height - this.height - (this.game.bottomGap + 20);
+    const right = this.game.width - this.width;
 
     if (this.y > bottom) {
       this.y = bottom;

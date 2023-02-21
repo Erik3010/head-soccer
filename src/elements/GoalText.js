@@ -20,7 +20,7 @@ class GoalText extends Drawable {
     };
 
     this.bottomPart = {
-      x: this.game.canvas.width,
+      x: this.game.width,
       y: this.y + this.height / 2,
     };
 
@@ -99,8 +99,8 @@ class GoalText extends Drawable {
     this.isShow = true;
   }
   async hide() {
-    // await this.animate({ top: -this.width, bottom: this.game.canvas.width });
-    await this.animate({ top: this.game.canvas.width, bottom: -this.width });
+    // await this.animate({ top: -this.width, bottom: this.game.width });
+    await this.animate({ top: this.game.width, bottom: -this.width });
     this.isShow = false;
   }
 }

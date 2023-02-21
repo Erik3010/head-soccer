@@ -83,6 +83,12 @@ class Game {
       powerUpActivation: null,
     };
   }
+  get width() {
+    return this.canvas.width;
+  }
+  get height() {
+    return this.canvas.height;
+  }
   async init() {
     await this.assetLoader.loadAssets();
 
@@ -128,8 +134,8 @@ class Game {
   initBackground() {
     this.background = new Background({
       ctx: this.ctx,
-      width: this.canvas.width,
-      height: this.canvas.height,
+      width: this.width,
+      height: this.height,
       type: BACKGROUND_TYPES.general,
       image: this.assetLoader.assets.background,
     });
@@ -168,7 +174,7 @@ class Game {
     });
     this.character.opponent = new Character({
       ...params,
-      x: this.canvas.width - width - this.characterRespawnPos.x,
+      x: this.width - width - this.characterRespawnPos.x,
       y: this.characterRespawnPos.y,
       isFlip: true,
       sprites: this.assetLoader.assets.character.opponent,
@@ -188,7 +194,7 @@ class Game {
     const left = new Goal({ ...params, x: 50, y: 260, side: "left" });
     const right = new Goal({
       ...params,
-      x: this.canvas.width - width / goalScale - 50,
+      x: this.width - width / goalScale - 50,
       y: 260,
       isFlip: true,
       side: "right",
@@ -211,7 +217,7 @@ class Game {
       height,
       gameInstance: this,
       ctx: this.ctx,
-      x: this.canvas.width / 2 - width / 2,
+      x: this.width / 2 - width / 2,
       y: 70,
       image: this.assetLoader.assets.ball,
     });
@@ -224,8 +230,8 @@ class Game {
       scale,
       gameInstance: this,
       ctx: this.ctx,
-      x: (this.canvas.width - width * scale) / 2,
-      y: (this.canvas.height - height * scale) / 2,
+      x: (this.width - width * scale) / 2,
+      y: (this.height - height * scale) / 2,
       width: width * scale,
       height: height * scale,
       image: this.assetLoader.assets.goalText,
@@ -245,7 +251,7 @@ class Game {
 
     const randomIndex = random(0, this.availablePowerUpItems.length - 1);
     const PowerUpItem = this.availablePowerUpItems[randomIndex];
-    const randomXPosition = random(size, this.canvas.width - size);
+    const randomXPosition = random(size, this.width - size);
 
     return new PowerUpItem({
       gameInstance: this,
@@ -312,28 +318,36 @@ class Game {
   resetPosition() {
     this.goalText.show();
 
-    const resetVelocity = () => {
+    const setInitialVelocity = () => {
       this.character.player.velocity = { x: 0, y: 0 };
       this.character.opponent.velocity = { x: 0, y: 0 };
       this.ball.velocity = { x: 0, y: 0 };
     };
 
+    const resetCharacterPosition = () => {
+      const { x, y } = this.characterRespawnPos;
+      const { width: opponentWidth } = this.character.opponent;
+
+      this.character.player.x = x;
+      this.character.player.y = y;
+
+      this.character.opponent.x = this.width - opponentWidth - x;
+      this.character.opponent.y = y;
+    };
+
+    const resetBallPosition = () => {
+      this.ball.x = this.width / 2 - this.ball.width / 2;
+      this.ball.y = 70;
+    };
+
     const reset = () => {
       this.isResetPosition = false;
 
-      resetVelocity();
+      this.powerUpItems = [];
 
-      this.character.player.y = this.characterRespawnPos.y;
-      this.character.player.x = this.characterRespawnPos.x;
-
-      this.character.opponent.y = this.characterRespawnPos.y;
-      this.character.opponent.x =
-        this.canvas.width -
-        this.character.opponent.width -
-        this.characterRespawnPos.x;
-
-      this.ball.y = 70;
-      this.ball.x = this.canvas.width / 2 - this.ball.width / 2;
+      setInitialVelocity();
+      resetCharacterPosition();
+      resetBallPosition();
 
       this.goalText.hide();
 
@@ -395,7 +409,7 @@ class Game {
     const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
     this.ball.angle = angle;
 
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.width, this.height);
     this.draw();
     requestAnimationFrame(this.render.bind(this));
   }
