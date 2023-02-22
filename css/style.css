@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   outline: none;
-  font-family: sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 html,
@@ -31,19 +31,31 @@ body {
   position: absolute;
   inset: 0;
   color: #fff;
+  overflow: hidden;
 }
 
 .welcome-screen {
+  background-image: url("./assets/UI/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: fade-blur 0.5s forwards;
+}
+
+.welcome-screen-wrapper {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: var(--primary);
+  backdrop-filter: saturate(150%) blur(5px);
 }
 
 .game-title {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   margin-bottom: 1rem;
+  font-weight: 800;
 }
 
 .btn {
@@ -51,7 +63,9 @@ body {
   background: none;
   outline: none;
   cursor: pointer;
-  transition: transform .3s ease;
+  transition: transform 0.3s ease;
+  animation: slide-in 1s ease forwards;
+  position: relative;
 }
 
 .btn:active {
@@ -60,14 +74,28 @@ body {
 
 .btn-play img {
   width: 70%;
-  animation: slide-in 1s;
+}
+
+@keyframes fade-blur {
+  0% {
+    opacity: 0;
+    filter: brightness(1) blur(20px);
+  }
+  10% {
+    opacity: 1;
+    filter: brightness(1.5) blur(10px);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) blur(0);
+  }
 }
 
 @keyframes slide-in {
   from {
-    transform: translateX(-100%);
+    bottom: -100%;
   }
   to {
-    transform: translateX(0);
+    bottom: 0;
   }
 }
