@@ -25,6 +25,7 @@ import DecreaseBallSizePowerUp from "./elements/PowerUpItem/DecreaseBallSize";
 import IncreaseBallSizePowerUp from "./elements/PowerUpItem/IncreaseBallSize";
 import DiamondIcePowerUp from "./elements/PowerUpItem/DiamondIce";
 import GoalText from "./elements/GoalText";
+import ScoreBoard from "./elements/ScoreBoard";
 
 class Game {
   constructor({ canvas }) {
@@ -51,6 +52,7 @@ class Game {
       opponent: null,
     };
     this.goalText = null;
+    this.scoreBoard = null;
 
     this.bottomGap = 70;
 
@@ -98,6 +100,7 @@ class Game {
     this.initGoals();
     this.initBall();
     this.initGoalText();
+    this.initScoreBoard();
 
     this.spawnPowerUpItem();
 
@@ -219,7 +222,7 @@ class Game {
       gameInstance: this,
       ctx: this.ctx,
       x: this.width / 2 - width / 2,
-      y: 70,
+      y: 120,
       image: this.assetLoader.assets.ball,
     });
   }
@@ -236,6 +239,12 @@ class Game {
       width: width * scale,
       height: height * scale,
       image: this.assetLoader.assets.goalText,
+    });
+  }
+  initScoreBoard() {
+    this.scoreBoard = new ScoreBoard({
+      gameInstance: this,
+      ctx: this.ctx,
     });
   }
   spawnPowerUpItem() {
@@ -338,7 +347,7 @@ class Game {
 
     const resetBallPosition = () => {
       this.ball.x = this.width / 2 - this.ball.width / 2;
-      this.ball.y = 70;
+      this.ball.y = 120;
     };
 
     const reset = () => {
@@ -373,6 +382,7 @@ class Game {
     this.character.opponent.draw();
     this.ball.draw();
     this.goalText.draw();
+    this.scoreBoard.draw();
 
     for (const key of Object.keys(this.goals)) {
       const goal = this.goals[key];
@@ -400,17 +410,17 @@ class Game {
       }
     }
   }
-  calculateOpponentDistanceFromBall() {
-    const distanceX =
-      this.ball.x +
-      this.ball.width / 2 -
-      (this.character.opponent.x + this.character.opponent.width / 2);
+  simulateOpponentBotMove() {
+    const ballCenterX = this.ball.x + this.ball.width / 2;
+    const opponentCenterX =
+      this.character.opponent.x + this.character.opponent.width / 2;
+    const distanceX = ballCenterX - opponentCenterX;
 
-    this.character.opponent.velocity.x = clamp(
-      +(distanceX * 0.05).toFixed(),
-      -this.character.opponent.moveSpeed,
-      this.character.opponent.moveSpeed
-    );
+    const newVelocity = Number((distanceX * 0.05).toFixed());
+    const maxSpeed = this.character.opponent.moveSpeed;
+
+    const clampedNewVelocity = clamp(newVelocity, -maxSpeed, maxSpeed);
+    this.character.opponent.velocity.x = clampedNewVelocity;
   }
   render(timestamp) {
     if (this.startTimestamp === null) {
@@ -422,7 +432,7 @@ class Game {
     const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
     this.ball.angle = angle;
 
-    this.calculateOpponentDistanceFromBall();
+    this.simulateOpponentBotMove();
 
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.draw();

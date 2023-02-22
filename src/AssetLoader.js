@@ -42,6 +42,7 @@ class AssetLoader {
       increaseBall: "Increase Ball.png",
       diamondIce: "Diamond Ice.png",
       goalText: "Goal - Text.png",
+      scoreBar: "Score Bar.png",
     };
   }
   async loadAssets() {
