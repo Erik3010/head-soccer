@@ -15,6 +15,59 @@ body {
   justify-content: center;
 }
 
+:root {
+  --primary: #225497;
+}
+
 #canvas {
   border: 1px solid #000;
+}
+
+#app {
+  position: relative;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  color: #fff;
+}
+
+.welcome-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--primary);
+}
+
+.game-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  transition: transform .3s ease;
+}
+
+.btn:active {
+  transform: scale(0.92);
+}
+
+.btn-play img {
+  width: 70%;
+  animation: slide-in 1s;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
