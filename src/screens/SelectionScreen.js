@@ -11,7 +11,10 @@ class SelectionScreen extends Screen {
       "#opponent-character"
     );
 
-    this.playerDialog = new PlayerDialog({ isOpen: true });
+    this.playerDialog = new PlayerDialog({
+      isOpen: false,
+      onConfirm: this.onConfirmDialog.bind(this),
+    });
   }
   init() {
     super.init();
@@ -21,8 +24,13 @@ class SelectionScreen extends Screen {
   }
   async nextHandler() {
     // this.manager.changeScreen("welcome");
-
     await this.playerDialog.show();
+  }
+  onConfirmDialog() {
+    // check user name is not empty
+    // next to the countdown page
+
+    this.manager.changeScreen("countdown");
   }
 }
 

@@ -1,3 +1,4 @@
+import CountDownScreen from "./screens/CountdownScreen";
 import SelectionScreen from "./screens/SelectionScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 
@@ -6,10 +7,11 @@ class ScreenManager {
     this.screens = {
       welcome: WelcomeScreen,
       selection: SelectionScreen,
+      countdown: CountDownScreen,
     };
 
-    this.activeScreen = "selection";
-    // this.activeScreen = "welcome";
+    // this.activeScreen = "selection";
+    this.activeScreen = "welcome";
   }
   get screen() {
     return new this.screens[this.activeScreen]({ manager: this });

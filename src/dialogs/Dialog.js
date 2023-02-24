@@ -1,9 +1,10 @@
 class Dialog {
-  constructor({ selector, isOpen = false }) {
+  constructor({ selector, isOpen = false, onConfirm = () => {} }) {
     this.selector = selector;
     this.el = document.querySelector(this.selector);
     this.isOpen = isOpen;
     this.isAnimating = false;
+    this.onConfirm = onConfirm;
 
     this.modalEl = this.el.querySelector(".modal");
 
@@ -12,6 +13,9 @@ class Dialog {
   init() {
     if (!this.isOpen) {
       this.el.classList.add("hide");
+    } else {
+      this.el.classList.remove("hide");
+      this.el.classList.add("show");
     }
   }
   async show() {

@@ -11,7 +11,8 @@ class PlayerDialog extends Dialog {
     btnDialogNext.addEventListener("click", async () => {
       await this.hide();
 
-      console.log("dialog closed");
+      this.onConfirm();
+      // console.log("dialog closed");
     });
   }
 }
