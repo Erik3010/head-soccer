@@ -44,6 +44,10 @@ body {
   overflow: hidden;
 }
 
+.selection-screen-title {
+  margin-bottom: 1rem;
+}
+
 .welcome-screen, .selection-screen {
   background-image: url("./assets/UI/bg.jpg");
   background-repeat: no-repeat;
@@ -63,10 +67,15 @@ body {
   backdrop-filter: saturate(150%) blur(5px);
 }
 
+.character-selection-container {
+  display: flex;
+  align-items: center;
+}
+
 .character-selection {
   /* width: 9.5rem;
   height: 220px; */
-  width: 500px;
+  width: 275px;
   height: 400px;
   overflow: hidden;
   display: flex;
@@ -155,6 +164,60 @@ body {
   object-fit: cover;
 }
 
+.middle-area {
+  width: 350px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.simple-selection-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.simple-selection-container > .selection-item + .selection-item{
+  margin-left: 2.5rem;
+}
+
+.stadium-selection {
+  height: 100px;
+  cursor: pointer;
+  border-radius: .5rem;
+  overflow: hidden;
+}
+
+.selection-item img {
+  transition: border-color .5s ease;
+  width: 100%;
+  height: 100%;
+}
+
+.selection-item input[type="radio"] {
+  display: none;
+}
+
+.selection-item input[type="radio"]:checked + img {
+  border: .3rem solid var(--variant);
+}
+
+.ball-selection {
+  width: 6rem;
+  height: 6rem;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.ball-selection input[type="radio"]:checked + img {
+  border-radius: 50%;
+}
+
+.middle-area h1 {
+  font-size: 3rem;
+  text-align: center;
+}
 
 .game-title {
   font-size: 3.5rem;
@@ -170,7 +233,6 @@ body {
   outline: none;
   cursor: pointer;
   transition: transform 0.3s ease;
-  animation: slide-up 1s ease forwards;
   position: relative;
 }
 
@@ -178,8 +240,113 @@ body {
   transform: scale(0.92);
 }
 
-.btn-play img {
-  width: 70%;
+.btn-play,
+.btn-next {
+  animation: slide-up 1s ease forwards;
+}
+
+.btn-play {
+  width: 180px;
+}
+
+.btn-next {
+  width: 70px;
+}
+
+.btn img {
+  width: 100%;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-image: url("./assets/UI/Window.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+  width: 400px;
+  height: 277px;
+}
+
+.modal-show {
+  animation: show-dialog cubic-bezier(0.075, 0.82, 0.165, 1) .6s forwards;
+}
+
+.modal-disapear {
+  animation: show-dialog cubic-bezier(0.075, 0.82, 0.165, 1) .6s forwards reverse;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  width: 100%;
+}
+
+.modal-body {
+  height: 140px;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.modal-cta {
+  height: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-cta .btn {
+  width: 150px;
+}
+
+.form-control {
+  width: 100%;
+  padding: .75rem;
+  border-radius: .5rem;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid var(--variant);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.form-control::placeholder {
+  color: #ececec;
+}
+
+.level-selection-container {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.level-selection-container > .level-selection + .level-selection {
+  margin-left: 1rem;
+}
+
+.level-selection-container input[type="radio"] {
+  display: none;
+}
+
+.level-selection-item {
+  border: 1px solid #fff;
+  padding: .75rem 1rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  color: #e6e6e6;
+}
+
+.level-selection input[type="radio"]:checked + .level-selection-item {
+  color: #fff;
+  background: linear-gradient(to bottom, var(--secondary), var(--variant));
 }
 
 @keyframes fade-blur {
@@ -212,5 +379,25 @@ body {
   }
   to {
     top: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes show-dialog {
+  from {
+    transform: translateY(-100px) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
   }
 }

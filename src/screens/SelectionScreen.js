@@ -1,52 +1,28 @@
+import PlayerDialog from "../dialogs/PlayerDialog";
+import CharacterSelection from "./CharacterSelection";
 import Screen from "./Screen";
 
 class SelectionScreen extends Screen {
   constructor(options) {
     super({ selector: ".selection-screen", ...options });
 
-    this.characters = [];
-    this.tempIndex = 0;
+    this.playerCharacterSelection = new CharacterSelection("#player-character");
+    this.opponentCharacterSelection = new CharacterSelection(
+      "#opponent-character"
+    );
+
+    this.playerDialog = new PlayerDialog({ isOpen: true });
   }
   init() {
-    this.characters = Array(...document.querySelectorAll(".character-item"));
+    super.init();
 
-    for (const [index, character] of this.characters.entries()) {
-      character.addEventListener(
-        "click",
-        this.characterClickHandler.bind(this, character, index)
-      );
-    }
+    const btnNext = document.querySelector(".btn-next");
+    btnNext.addEventListener("click", this.nextHandler.bind(this));
   }
-  characterClickHandler(character, index, event) {
-    this.tempIndex = index;
-    const wrapper = document.querySelector(".character-selection-wrapper");
+  async nextHandler() {
+    // this.manager.changeScreen("welcome");
 
-    const activeCharacter = document.querySelector(".character-item.active");
-    activeCharacter.classList.remove("active");
-
-    if (index === this.characters.length - 3) {
-      // do something if it's last character
-      const offsetTop = character.clientHeight * (index - 1) - 50 * (index - 1);
-      wrapper.style.transform = `translateY(-${offsetTop}px)`;
-
-      setTimeout(() => {
-        wrapper.style.transition = "none";
-        wrapper.style.transform = `translateY(0px)`;
-        this.characters[1].classList.add("active");
-
-        setTimeout(
-          () => (wrapper.style.transition = "transform .3s ease"),
-          200
-        );
-      }, 300);
-
-      return;
-    }
-
-    character.classList.add("active");
-
-    const offsetTop = character.clientHeight * (index - 1) - 50 * (index - 1);
-    wrapper.style.transform = `translateY(-${offsetTop}px)`;
+    await this.playerDialog.show();
   }
 }
 
