@@ -1,4 +1,5 @@
-import CountDownScreen from "./screens/CountdownScreen";
+import CountDownScreen from "./screens/CountDownScreen";
+import GameScreen from "./screens/GameScreen";
 import SelectionScreen from "./screens/SelectionScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 
@@ -8,10 +9,12 @@ class ScreenManager {
       welcome: WelcomeScreen,
       selection: SelectionScreen,
       countdown: CountDownScreen,
+      game: GameScreen,
     };
 
-    // this.activeScreen = "selection";
-    this.activeScreen = "welcome";
+    // this.activeScreen = "welcome";
+    this.activeScreen = "selection";
+    // this.activeScreen = "countdown";
   }
   get screen() {
     return new this.screens[this.activeScreen]({ manager: this });

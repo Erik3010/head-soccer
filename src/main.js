@@ -5,6 +5,6 @@ import ScreenManager from "./ScreenManager";
 const screenManager = new ScreenManager();
 screenManager.init();
 
-const canvas = document.querySelector("#canvas");
-const game = new Game({ canvas });
-game.init();
+// const canvas = document.querySelector("#canvas");
+// const game = new Game({ canvas });
+// game.init();

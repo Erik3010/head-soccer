@@ -1,9 +1,15 @@
 class Dialog {
-  constructor({ selector, isOpen = false, onConfirm = () => {} }) {
+  constructor({
+    selector,
+    isOpen = false,
+    canClose = () => true,
+    onConfirm = () => {},
+  }) {
     this.selector = selector;
     this.el = document.querySelector(this.selector);
     this.isOpen = isOpen;
     this.isAnimating = false;
+    this.canClose = canClose;
     this.onConfirm = onConfirm;
 
     this.modalEl = this.el.querySelector(".modal");

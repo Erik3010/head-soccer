@@ -9,10 +9,10 @@ class PlayerDialog extends Dialog {
 
     const btnDialogNext = document.querySelector(".btn-dialog-next");
     btnDialogNext.addEventListener("click", async () => {
-      await this.hide();
+      if (!this.canClose()) return;
 
+      await this.hide();
       this.onConfirm();
-      // console.log("dialog closed");
     });
   }
 }

@@ -14,7 +14,10 @@ class SelectionScreen extends Screen {
     this.playerDialog = new PlayerDialog({
       isOpen: false,
       onConfirm: this.onConfirmDialog.bind(this),
+      canClose: () => !!this.usernameField.value,
     });
+
+    this.usernameField = document.querySelector("#username");
   }
   init() {
     super.init();
@@ -27,9 +30,6 @@ class SelectionScreen extends Screen {
     await this.playerDialog.show();
   }
   onConfirmDialog() {
-    // check user name is not empty
-    // next to the countdown page
-
     this.manager.changeScreen("countdown");
   }
 }

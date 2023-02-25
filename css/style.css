@@ -27,6 +27,8 @@ body {
 
 #app {
   position: relative;
+  width: 1000px;
+  height: 600px;
 }
 
 .show {
@@ -77,8 +79,9 @@ body {
   justify-content: center;
 }
 
-.countdown-screen-wrapper h1 {
+.countdown-text {
   font-size: 7rem;
+  animation: popup .3s ease;
 }
 
 .character-selection-container {
@@ -413,5 +416,14 @@ body {
   to {
     transform: translateY(0px) scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes popup {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
   }
 }
