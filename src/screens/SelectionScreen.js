@@ -1,4 +1,5 @@
 import PlayerDialog from "../dialogs/PlayerDialog";
+import { getSelectedRadioValue } from "../utility";
 import CharacterSelection from "./CharacterSelection";
 import Screen from "./Screen";
 
@@ -26,10 +27,19 @@ class SelectionScreen extends Screen {
     btnNext.addEventListener("click", this.nextHandler.bind(this));
   }
   async nextHandler() {
-    // this.manager.changeScreen("welcome");
     await this.playerDialog.show();
   }
   onConfirmDialog() {
+    this.manager.selectedPlayer = {
+      player: this.playerCharacterSelection.activeCharacterName,
+      opponent: this.opponentCharacterSelection.activeCharacterName,
+    };
+
+    this.manager.selectedBall = getSelectedRadioValue("ball");
+    this.manager.selectedBg = getSelectedRadioValue("stadium");
+    this.manager.gameLevel = getSelectedRadioValue("level");
+    this.manager.username = this.usernameField.value;
+
     this.manager.changeScreen("countdown");
   }
 }

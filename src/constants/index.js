@@ -28,7 +28,7 @@ export const CHARACTER_STATE_FRAME_MAP = {
 };
 
 export const BACKGROUND_TYPES = {
-  general: "background1",
+  out_door: "background1",
   stadium: "background2",
 };
 
@@ -44,4 +44,11 @@ export const KICK_KEYS = ["Space"];
 export const MOVEMENT_DIRECTION_MAP = {
   KeyA: -1,
   KeyD: 1,
+};
+
+export const GAME_LEVEL = ["easy", "medium", "hard"];
+export const GAME_DURATION = {
+  easy: 30,
+  medium: 20,
+  hard: 15,
 };

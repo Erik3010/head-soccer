@@ -21,9 +21,9 @@ body {
   --variant: #e88322;
 }
 
-#canvas {
+/* #canvas {
   border: 1px solid #000;
-}
+} */
 
 #app {
   position: relative;

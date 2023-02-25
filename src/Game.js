@@ -28,16 +28,15 @@ import GoalText from "./elements/GoalText";
 import ScoreBoard from "./elements/ScoreBoard";
 
 class Game {
-  constructor({ canvas }) {
+  constructor({ canvas, background, ball, player, opponent, username, level }) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    this.selectedPlayer = {
-      player: "japan",
-      opponent: "germany",
-    };
-    this.selectedBall = null;
-    this.selectedBackground = null;
+    this.selectedPlayer = { player, opponent };
+    this.selectedBall = BALL_TYPES[ball];
+    this.selectedBackground = BACKGROUND_TYPES[background];
+    this.username = username;
+    this.level = level;
 
     this.startTimestamp = null;
 
@@ -63,8 +62,8 @@ class Game {
     };
 
     this.assetLoader = new AssetLoader({
-      backgroundType: BACKGROUND_TYPES.general,
-      ballType: BALL_TYPES.general,
+      backgroundType: this.selectedBackground,
+      ballType: this.selectedBall,
       player: this.selectedPlayer.player,
       opponent: this.selectedPlayer.opponent,
     });
@@ -140,7 +139,7 @@ class Game {
       ctx: this.ctx,
       width: this.width,
       height: this.height,
-      type: BACKGROUND_TYPES.general,
+      type: this.selectedBackground,
       image: this.assetLoader.assets.background,
     });
 
@@ -242,10 +241,7 @@ class Game {
     });
   }
   initScoreBoard() {
-    this.scoreBoard = new ScoreBoard({
-      gameInstance: this,
-      ctx: this.ctx,
-    });
+    this.scoreBoard = new ScoreBoard({ gameInstance: this, ctx: this.ctx });
   }
   spawnPowerUpItem() {
     const powerUpItem = this.generatePowerUpItem();

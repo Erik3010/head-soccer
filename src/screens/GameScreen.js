@@ -7,10 +7,19 @@ class GameScreen extends Screen {
   }
   init() {
     super.init();
-    console.log("asdasd");
+
+    const { player, opponent } = this.manager.selectedPlayer;
 
     const canvas = document.querySelector("#canvas");
-    const game = new Game({ canvas });
+    const game = new Game({
+      canvas,
+      player,
+      opponent,
+      username: this.manager.username,
+      level: this.manager.gameLevel,
+      background: this.manager.selectedBg,
+      ball: this.manager.selectedBall,
+    });
     game.init();
   }
 }

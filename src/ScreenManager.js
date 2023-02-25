@@ -15,6 +15,15 @@ class ScreenManager {
     // this.activeScreen = "welcome";
     this.activeScreen = "selection";
     // this.activeScreen = "countdown";
+
+    this.username = null;
+    this.gameLevel = null;
+    this.selectedBall = null;
+    this.selectedBg = null;
+    this.selectedPlayer = {
+      player: null,
+      opponent: null,
+    };
   }
   get screen() {
     return new this.screens[this.activeScreen]({ manager: this });

@@ -76,3 +76,6 @@ export const easeAnimation = (distance, currentFrame, step) => {
   currentFrame -= 2;
   return (distance / 2) * (Math.pow(currentFrame, 3) + 2);
 };
+
+export const getSelectedRadioValue = (name) =>
+  document.querySelector(`[name='${name}']:checked`)?.value ?? null;

@@ -16,11 +16,16 @@ class CharacterSelection {
       );
     }
   }
+  get activeCharacter() {
+    return this.el.querySelector(".character-item.active");
+  }
+  get activeCharacterName() {
+    return this.activeCharacter?.getAttribute("data-value") ?? null;
+  }
   handleCharacterClick(character, index) {
     const wrapper = this.el.querySelector(".character-selection-wrapper");
 
-    const activeCharacter = this.el.querySelector(".character-item.active");
-    activeCharacter.classList.remove("active");
+    this.activeCharacter.classList.remove("active");
 
     if (index === 0 || index === this.characters.length - 1) {
       wrapper.style.transition = "none";
