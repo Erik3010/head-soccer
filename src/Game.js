@@ -6,6 +6,7 @@ import {
   BACKGROUND_TYPES,
   BALL_TYPES,
   CHARACTER_STATES,
+  GAME_DURATION,
   MOVEMENT_DIRECTION_MAP,
 } from "./constants";
 import AssetLoader from "./AssetLoader";
@@ -26,6 +27,7 @@ import IncreaseBallSizePowerUp from "./elements/PowerUpItem/IncreaseBallSize";
 import DiamondIcePowerUp from "./elements/PowerUpItem/DiamondIce";
 import GoalText from "./elements/GoalText";
 import ScoreBoard from "./elements/ScoreBoard";
+import Text from "./engine/Text";
 
 class Game {
   constructor({ canvas, background, ball, player, opponent, username, level }) {
@@ -38,24 +40,29 @@ class Game {
     this.username = username;
     this.level = level;
 
+    this.gameDuration = GAME_DURATION[this.level];
     this.startTimestamp = null;
+    this.elapsedTime = 0;
+    this.currentTime = this.gameDuration;
 
-    this.background = null;
-    this.flagBoard = null;
-    this.ball = null;
-    // this.goals = [];
-    this.goals = {};
-    this.powerUpItems = [];
     this.character = {
       player: null,
       opponent: null,
     };
+    this.background = null;
+    this.flagBoard = null;
+    this.ball = null;
+    this.goals = {};
+    this.powerUpItems = [];
+
     this.goalText = null;
     this.scoreBoard = null;
+    this.timerText = null;
 
     this.bottomGap = 70;
 
     this.isResetPosition = false;
+    this.isSuddenDeath = false;
     this.score = {
       player: 0,
       opponent: 0,
@@ -78,11 +85,12 @@ class Game {
       IncreaseBallSizePowerUp,
       DiamondIcePowerUp,
     ];
-
     this.isPowerUpActive = false;
+
     this.intervalIds = {
       spawnPowerUp: null,
       powerUpActivation: null,
+      countDownTimer: null,
     };
   }
   get width() {
@@ -102,6 +110,9 @@ class Game {
     this.initScoreBoard();
 
     this.spawnPowerUpItem();
+
+    this.initCountDownTimer();
+    this.initTimerText();
 
     // dummy code
     setInterval(() => {
@@ -243,6 +254,38 @@ class Game {
   initScoreBoard() {
     this.scoreBoard = new ScoreBoard({ gameInstance: this, ctx: this.ctx });
   }
+  initCountDownTimer() {
+    const countDownCallback = () => {
+      const second = Math.floor(this.elapsedTime / 1000);
+      this.currentTime = this.gameDuration - second;
+
+      if (this.currentTime === 0) {
+        if (this.score.player === this.score.opponent) {
+          this.isSuddenDeath = true;
+        } else {
+          this.stopGame();
+        }
+        clearTimeout(this.intervalIds.countDownTimer);
+        this.intervalIds.countDownTimer = null;
+        return;
+      }
+
+      this.intervalIds.countDownTimer = setTimeout(countDownCallback, 1000);
+    };
+
+    countDownCallback();
+  }
+  initTimerText() {
+    this.timerText = new Text({
+      ctx: this.ctx,
+      x: this.canvas.width / 2 - 25,
+      fontWeight: "bold",
+      y: 165,
+      fontSize: 48,
+      color: "#225497",
+      text: this.currentTime,
+    });
+  }
   spawnPowerUpItem() {
     const powerUpItem = this.generatePowerUpItem();
     this.powerUpItems.push(powerUpItem);
@@ -312,6 +355,9 @@ class Game {
       };
       if (!this.isResetPosition) {
         this.score[scoreMap[goal.side]]++;
+
+        // TODO: need to check is sudden death or no
+
         this.isResetPosition = true;
         this.resetPosition();
       }
@@ -320,6 +366,10 @@ class Game {
     }
 
     this.handleBallCollisionDirection(goal, side);
+  }
+  stopGame() {
+    // TODO: functionality to stop the game and show game over modal
+    console.log("game must be stopped");
   }
   resetPosition() {
     this.goalText.show();
@@ -379,6 +429,7 @@ class Game {
     this.ball.draw();
     this.goalText.draw();
     this.scoreBoard.draw();
+    this.timerText.draw(this.currentTime);
 
     for (const key of Object.keys(this.goals)) {
       const goal = this.goals[key];
@@ -423,9 +474,12 @@ class Game {
       this.startTimestamp = timestamp;
     }
 
-    const elapsed = timestamp - this.startTimestamp;
-    const time = Math.floor(elapsed / 1000);
-    const angle = mapValue(elapsed % 1000, 0, 1000, 0, 360);
+    this.elapsedTime = timestamp - this.startTimestamp;
+    // const elapsed = timestamp - this.startTimestamp;
+    // const time = Math.floor(elapsed / 1000);
+    // console.log(time);
+
+    const angle = mapValue(this.elapsedTime % 1000, 0, 1000, 0, 360);
     this.ball.angle = angle;
 
     this.simulateOpponentBotMove();

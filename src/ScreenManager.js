@@ -15,6 +15,7 @@ class ScreenManager {
     // this.activeScreen = "welcome";
     this.activeScreen = "selection";
     // this.activeScreen = "countdown";
+    // this.activeScreen = "game";
 
     this.username = null;
     this.gameLevel = null;

@@ -12,16 +12,19 @@ class CountDownScreen extends Screen {
   init() {
     super.init();
 
-    this.timer = setInterval(() => {
-      if (this.countdown === 1) {
-        clearInterval(this.timer);
-        this.manager.changeScreen("game");
-        return;
-      }
+    this.manager.changeScreen("game");
 
-      const htmlString = `<h1 class="countdown-text">${--this.countdown}</h1>`;
-      this.wrapper.innerHTML = htmlString;
-    }, 1000);
+    // TODO: for development purpose this code below will be commented
+    // this.timer = setInterval(() => {
+    //   if (this.countdown === 1) {
+    //     clearInterval(this.timer);
+    //     this.manager.changeScreen("game");
+    //     return;
+    //   }
+
+    //   const htmlString = `<h1 class="countdown-text">${--this.countdown}</h1>`;
+    //   this.wrapper.innerHTML = htmlString;
+    // }, 1000);
   }
 }
 
