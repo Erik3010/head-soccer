@@ -48,7 +48,9 @@ body {
   margin-bottom: 1rem;
 }
 
-.welcome-screen, .selection-screen {
+.welcome-screen,
+.selection-screen,
+.countdown-screen {
   background-image: url("./assets/UI/bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -57,7 +59,8 @@ body {
 }
 
 .welcome-screen-wrapper,
-.selection-screen-wrapper {
+.selection-screen-wrapper,
+.countdown-screen-wrapper {
   position: absolute;
   inset: 0;
   display: flex;
@@ -65,6 +68,17 @@ body {
   justify-content: center;
   flex-direction: column;
   backdrop-filter: saturate(150%) blur(5px);
+}
+
+.countdown-screen-wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-screen-wrapper h1 {
+  font-size: 7rem;
 }
 
 .character-selection-container {
@@ -83,7 +97,7 @@ body {
 }
 
 .character-selection-wrapper {
-  transition: transform .3s ease;
+  transition: transform 0.3s ease;
 }
 
 .character-item {
@@ -92,7 +106,7 @@ body {
   cursor: pointer;
   transition-property: transform, box-shadow, top, opacity;
   transform: scale(0.7);
-  opacity: .8;
+  opacity: 0.8;
   margin: -50px 0 -50px 0;
 }
 
@@ -119,7 +133,7 @@ body {
   height: 9.5rem;
   border-radius: 100%;
   background: linear-gradient(to bottom, var(--secondary), var(--variant));
-  border: .4rem solid #fff;
+  border: 0.4rem solid #fff;
   overflow: hidden;
   box-shadow: inset 0px 10px 10px 10px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -136,10 +150,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: .35rem .75rem;
+  padding: 0.35rem 0.75rem;
   background: linear-gradient(to bottom, var(--secondary), var(--variant));
-  border: .2rem solid #fff;
-  border-radius: .5rem;
+  border: 0.2rem solid #fff;
+  border-radius: 0.5rem;
   margin-top: -2rem;
   box-shadow: inset 0px 10px 10px 10px rgba(0, 0, 0, 0.1);
 }
@@ -154,8 +168,8 @@ body {
   height: 28px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: .6rem;
-  border: .1rem solid #fff;
+  margin-right: 0.6rem;
+  border: 0.1rem solid #fff;
 }
 
 .character-flag img {
@@ -178,19 +192,19 @@ body {
   margin-top: 2rem;
 }
 
-.simple-selection-container > .selection-item + .selection-item{
+.simple-selection-container > .selection-item + .selection-item {
   margin-left: 2.5rem;
 }
 
 .stadium-selection {
   height: 100px;
   cursor: pointer;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   overflow: hidden;
 }
 
 .selection-item img {
-  transition: border-color .5s ease;
+  transition: border-color 0.5s ease;
   width: 100%;
   height: 100%;
 }
@@ -200,7 +214,7 @@ body {
 }
 
 .selection-item input[type="radio"]:checked + img {
-  border: .3rem solid var(--variant);
+  border: 0.3rem solid var(--variant);
 }
 
 .ball-selection {
@@ -276,11 +290,11 @@ body {
 }
 
 .modal-show {
-  animation: show-dialog cubic-bezier(0.075, 0.82, 0.165, 1) .6s forwards;
+  animation: show-dialog cubic-bezier(0.075, 0.82, 0.165, 1) 0.6s forwards;
 }
 
 .modal-disapear {
-  animation: show-dialog cubic-bezier(0.075, 0.82, 0.165, 1) .6s forwards reverse;
+  animation: show-dialog cubic-bezier(0.075, 0.82, 0.165, 1) 0.6s forwards reverse;
 }
 
 .modal-header {
@@ -311,9 +325,9 @@ body {
 
 .form-control {
   width: 100%;
-  padding: .75rem;
-  border-radius: .5rem;
-  background: rgba(0,0,0,0.5);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
   border: 2px solid var(--variant);
   color: #fff;
   font-size: 1rem;
@@ -338,8 +352,8 @@ body {
 
 .level-selection-item {
   border: 1px solid #fff;
-  padding: .75rem 1rem;
-  border-radius: .5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   color: #e6e6e6;
 }
