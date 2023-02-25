@@ -92,6 +92,8 @@ class Game {
       powerUpActivation: null,
       countDownTimer: null,
     };
+
+    this.pause = false;
   }
   get width() {
     return this.canvas.width;
@@ -262,6 +264,9 @@ class Game {
       if (this.currentTime === 0) {
         if (this.score.player === this.score.opponent) {
           this.isSuddenDeath = true;
+
+          this.timerText.x -= 90;
+          this.timerText.fontSize = 32;
         } else {
           this.stopGame();
         }
@@ -359,6 +364,12 @@ class Game {
         // TODO: need to check is sudden death or no
 
         this.isResetPosition = true;
+
+        if (this.isSuddenDeath) {
+          this.stopGame();
+          return;
+        }
+
         this.resetPosition();
       }
 
@@ -369,7 +380,15 @@ class Game {
   }
   stopGame() {
     // TODO: functionality to stop the game and show game over modal
-    console.log("game must be stopped");
+    const stopGameHandler = () => {
+      for (const key in this.intervalIds) {
+        clearTimeout(this.intervalIds[key]);
+      }
+
+      this.pause = true;
+    };
+
+    setTimeout(stopGameHandler, 60);
   }
   resetPosition() {
     this.goalText.show();
@@ -429,7 +448,11 @@ class Game {
     this.ball.draw();
     this.goalText.draw();
     this.scoreBoard.draw();
-    this.timerText.draw(this.currentTime);
+    // this.timerText.draw(this.currentTime);
+    this.timerText.draw();
+    this.timerText.text = this.isSuddenDeath
+      ? "Sudden Death"
+      : this.currentTime;
 
     for (const key of Object.keys(this.goals)) {
       const goal = this.goals[key];
@@ -470,14 +493,13 @@ class Game {
     this.character.opponent.velocity.x = clampedNewVelocity;
   }
   render(timestamp) {
+    if (this.pause) return;
+
     if (this.startTimestamp === null) {
       this.startTimestamp = timestamp;
     }
 
     this.elapsedTime = timestamp - this.startTimestamp;
-    // const elapsed = timestamp - this.startTimestamp;
-    // const time = Math.floor(elapsed / 1000);
-    // console.log(time);
 
     const angle = mapValue(this.elapsedTime % 1000, 0, 1000, 0, 360);
     this.ball.angle = angle;

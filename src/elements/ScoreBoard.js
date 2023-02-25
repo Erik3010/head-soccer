@@ -61,7 +61,10 @@ class ScoreBoard extends Drawable {
     this.ctx.drawImage(scoreBar, centerX, 30, scoreBar.width, scoreBar.height);
 
     for (const characterType in this.scoreText) {
-      this.scoreText[characterType].draw(this.game.score[characterType]);
+      // this.scoreText[characterType].draw(this.game.score[characterType]);
+      this.scoreText[characterType].draw();
+      this.scoreText[characterType].text = this.game.score[characterType];
+
       this.drawFlag(characterType);
     }
   }

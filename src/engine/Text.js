@@ -26,7 +26,8 @@ class Text extends Drawable {
     this.ctx.save();
     this.ctx.font = `${this.fontWeight} ${this.fontSize}px ${this.fontFamily}`;
     this.ctx.fillStyle = this.color;
-    this.ctx.fillText(newText ?? this.text, this.x, this.y);
+    // this.ctx.fillText(newText ?? this.text, this.x, this.y);
+    this.ctx.fillText(this.text, this.x, this.y);
     this.ctx.restore();
   }
 }
