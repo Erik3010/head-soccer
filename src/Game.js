@@ -356,9 +356,7 @@ class Game {
         this.score[scoreMap[goal.side]]++;
 
         // TODO: need to check is sudden death or no
-
         this.isResetPosition = true;
-
         if (this.isSuddenDeath) {
           this.stopGame();
           return;
