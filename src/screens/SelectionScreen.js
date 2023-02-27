@@ -1,6 +1,6 @@
 import PlayerDialog from "../dialogs/PlayerDialog";
 import { getSelectedRadioValue } from "../utility";
-import CharacterSelection from "./CharacterSelection";
+import CharacterSelection from "../components/CharacterSelection";
 import Screen from "./Screen";
 
 class SelectionScreen extends Screen {

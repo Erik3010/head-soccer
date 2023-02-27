@@ -28,6 +28,7 @@ import DiamondIcePowerUp from "./elements/PowerUpItem/DiamondIce";
 import GoalText from "./elements/GoalText";
 import ScoreBoard from "./elements/ScoreBoard";
 import Text from "./engine/Text";
+import GameOverDialog from "./dialogs/GameOverDialog";
 
 class Game {
   constructor({ canvas, background, ball, player, opponent, username, level }) {
@@ -45,10 +46,7 @@ class Game {
     this.elapsedTime = 0;
     this.currentTime = this.gameDuration;
 
-    this.character = {
-      player: null,
-      opponent: null,
-    };
+    this.character = { player: null, opponent: null };
     this.background = null;
     this.flagBoard = null;
     this.ball = null;
@@ -63,10 +61,7 @@ class Game {
 
     this.isResetPosition = false;
     this.isSuddenDeath = false;
-    this.score = {
-      player: 0,
-      opponent: 0,
-    };
+    this.score = { player: 0, opponent: 0 };
 
     this.assetLoader = new AssetLoader({
       backgroundType: this.selectedBackground,
@@ -75,10 +70,7 @@ class Game {
       opponent: this.selectedPlayer.opponent,
     });
 
-    this.characterRespawnPos = {
-      x: 150,
-      y: 100,
-    };
+    this.characterRespawnPos = { x: 150, y: 100 };
 
     this.availablePowerUpItems = [
       DecreaseBallSizePowerUp,
@@ -94,6 +86,8 @@ class Game {
     };
 
     this.pause = false;
+
+    this.gameOverDialog = new GameOverDialog();
   }
   get width() {
     return this.canvas.width;
@@ -386,6 +380,13 @@ class Game {
       }
 
       this.pause = true;
+
+      this.gameOverDialog.update({
+        username: this.username,
+        flag: this.selectedPlayer,
+        score: this.score,
+      });
+      this.gameOverDialog.show();
     };
 
     setTimeout(stopGameHandler, 60);

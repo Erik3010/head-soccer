@@ -322,8 +322,66 @@ body {
   justify-content: center;
 }
 
-.modal-cta .btn {
+#player-dialog .modal-cta .btn {
   width: 150px;
+}
+
+#game-over-dialog .modal-cta .btn {
+  width: 48px;
+}
+
+#game-over-dialog .modal-body > * + * {
+  margin-top: .5rem;
+}
+
+.modal-info-item {
+  margin-bottom: 1.55rem;
+  text-align: center;
+}
+
+.modal-info-item p {
+  font-size: 1.25rem;
+}
+
+.btn-group > .btn + .btn {
+  margin-left: .75rem;
+}
+
+.score-result-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-result-middle {
+  font-weight: bold;
+  font-size: 1.15rem;
+  margin: 0 1rem;
+}
+
+.score-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flag-area {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #fff;
+  overflow: hidden;
+}
+
+.flag-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.score-result-text {
+  font-weight: bold;
+  margin-top: .5rem;
 }
 
 .form-control {

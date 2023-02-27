@@ -325,6 +325,44 @@
         </div>
       </div>
     </div>
+
+    <div class="modal-backdrop hide" id="game-over-dialog">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Game Over</h2>
+        </div>
+        <div class="modal-body">
+          <div class="modal-info-item">
+            <p id="username-area">this is username</p>
+          </div>
+          <div class="score-result-container">
+            <div class="score-result">
+              <div class="flag-area" id="player-score-flag">
+                <img src="./assets/Flag/Brazil.png">
+              </div>
+              <div class="score-result-text" id="player-score-text">1</div>
+            </div>
+            <div class="score-result-middle">VS</div>
+            <div class="score-result">
+              <div class="flag-area" id="opponent-score-flag">
+                <img src="./assets/Flag/Brazil.png">
+              </div>
+              <div class="score-result-text" id="opponent-score-text">1</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-cta">
+          <div class="btn-group">
+            <button class="btn btn-dialog-restart">
+              <img src="./assets/UI/Button Normal-20.png">
+            </button>
+            <button class="btn btn-dialog-leaderboard">
+              <img src="./assets/UI/Button Normal-09.png">
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <script type="module" src="./src/main.js"></script>
 </body>
