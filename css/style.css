@@ -53,7 +53,7 @@ body {
 .welcome-screen,
 .selection-screen,
 .countdown-screen {
-  background-image: url("./assets/UI/bg.jpg");
+  background-image: url("../assets/UI/bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -81,7 +81,7 @@ body {
 
 .countdown-text {
   font-size: 7rem;
-  animation: popup .3s ease;
+  animation: popup 0.3s ease;
 }
 
 .character-selection-container {
@@ -284,7 +284,7 @@ body {
 }
 
 .modal {
-  background-image: url("./assets/UI/Window.png");
+  background-image: url("../assets/UI/Window.png");
   background-repeat: no-repeat;
   background-size: cover;
   color: #fff;
@@ -331,7 +331,7 @@ body {
 }
 
 #game-over-dialog .modal-body > * + * {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .modal-info-item {
@@ -344,7 +344,7 @@ body {
 }
 
 .btn-group > .btn + .btn {
-  margin-left: .75rem;
+  margin-left: 0.75rem;
 }
 
 .score-result-container {
@@ -381,7 +381,7 @@ body {
 
 .score-result-text {
   font-weight: bold;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .form-control {
