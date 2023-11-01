@@ -10,6 +10,6 @@
     "deploy": "sh deploy.sh"
   },
   "devDependencies": {
-    "vite": "^4.0.0"
+    "vite": "^4.0.5"
   }
 }
